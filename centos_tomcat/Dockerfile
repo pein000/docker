@@ -1,60 +1,60 @@
-##»ù´¡¾µÏñcentos
+##åŸºç¡€é•œåƒcentos
 FROM centos
 
 
-##´´½¨ÕßĞÅÏ¢
+##åˆ›å»ºè€…ä¿¡æ¯
 MAINTAINER qiuwei "vesalqiu_000@163.com"
 
 
-##°²×°³ÌĞò
+##å®‰è£…ç¨‹åº
 
-#°²×°wget
+#å®‰è£…wget
 RUN yum -y install wget
-#ÏÂÔØtomcat
+#ä¸‹è½½tomcat
 RUN wget http://mirrors.hust.edu.cn/apache/tomcat/tomcat-8/v8.0.36/bin/apache-tomcat-8.0.36.tar.gz
-# ÏÂÔØjdk8 ¹ÙÍø²»ÄÜÖ±½ÓÊ¹ÓÃwget ±ØĞëÌí¼Ó±ØÒªµÄhttpÍ·ÉèÖÃ¡£
-wget --no-cookies --no-check-certificate --header "Cookie:gpw_e24=http%3a%2f%2fwww.oracle.com%2ftechnetwork%2fjava%2fjavase%2fdownloads%2fjdk7-downloads-1880260.html;oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz
-#°²×°vim
+# ä¸‹è½½jdk8 å®˜ç½‘ä¸èƒ½ç›´æ¥ä½¿ç”¨wget å¿…é¡»æ·»åŠ å¿…è¦çš„httpå¤´è®¾ç½®ã€‚
+RUN wget --no-cookies --no-check-certificate --header "Cookie:gpw_e24=http%3a%2f%2fwww.oracle.com%2ftechnetwork%2fjava%2fjavase%2fdownloads%2fjdk7-downloads-1880260.html;oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.tar.gz
+#å®‰è£…vim
 RUN yum -y install vim*
-#°²×°git
+#å®‰è£…git
 RUN yum -y install git*
-#´ÓgithubÉÏÏÂÔØ
+#ä»githubä¸Šä¸‹è½½
 RUN git clone https://github.com/pein000/police_console.git 
-#ÏÂÔØmaven
+#ä¸‹è½½maven
 RUN wget http://mirror.bit.edu.cn/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
-# ÏÂÔØgradle 2.9
+# ä¸‹è½½gradle 2.9
 RUN wget https://services.gradle.org/distributions/gradle-2.9-bin.zip
-# °²×°zip½âÑ¹¹¤¾ß
+# å®‰è£…zipè§£å‹å·¥å…·
 RUN yum install -y unzip zip
-#½âÑ¹gradle
+#è§£å‹gradle
 RUN unzip gradle-2.9-bin.zip
-#gradle±àÒë ´ò°ü
+#gradleç¼–è¯‘ æ‰“åŒ…
 WORKDIR /home/tomcat/firstProject/share-online-video
 RUN gradle clean war
 
 RUN yum -y install gcc automake autoconf libtool make
-#°²×°vim
+#å®‰è£…vim
 RUN yum -y install vim*
-#ĞÂ½¨ÓÃ»§
+#æ–°å»ºç”¨æˆ·
 RUN useradd redis
-#ÇĞ»»µ½redisÓÃ»§Ä¿Â¼
+#åˆ‡æ¢åˆ°redisç”¨æˆ·ç›®å½•
 WORKDIR /home/redis
-#ÏÂÔØreids 3.0
+#ä¸‹è½½reids 3.0
 RUN wget http://download.redis.io/releases/redis-3.0.6.tar.gz
-#½âÑ¹
+#è§£å‹
 RUN tar -zxvf redis-3.0.6.tar.gz
-#ÇĞ»»µ½redisÄ¿Â¼
+#åˆ‡æ¢åˆ°redisç›®å½•
 WORKDIR redis-3.0.6
-#Ô´Âë°²×°redis£¬³É¹¦ºó£¬ÔÚsrcÄ¿Â¼ÖĞ´æÔÚredis-cli¡¢redis-server¡£
+#æºç å®‰è£…redisï¼ŒæˆåŠŸåï¼Œåœ¨srcç›®å½•ä¸­å­˜åœ¨redis-cliã€redis-serverã€‚
 RUN make
-#É¾³ıcontainerÖĞµÄredis.conf¡£Ê¹ÓÃÍâ²¿×Ô¶¨ÒåµÄredis.conf. ADDÃüÁî£º½«dockerfileÂ·¾¶ÏÂµÄconfÄ¿Â¼ÖĞµÄÎÄ¼ş¸´ÖÆµ½ÈİÆ÷µÄµ±Ç°Ä¿Â¼(/home/redis/redis-3.0.6)
+#åˆ é™¤containerä¸­çš„redis.confã€‚ä½¿ç”¨å¤–éƒ¨è‡ªå®šä¹‰çš„redis.conf. ADDå‘½ä»¤ï¼šå°†dockerfileè·¯å¾„ä¸‹çš„confç›®å½•ä¸­çš„æ–‡ä»¶å¤åˆ¶åˆ°å®¹å™¨çš„å½“å‰ç›®å½•(/home/redis/redis-3.0.6)
 ADD conf .
-#ĞÂ½¨logsÄ¿Â¼£¬´æ·ÅÈÕÖ¾
+#æ–°å»ºlogsç›®å½•ï¼Œå­˜æ”¾æ—¥å¿—
 RUN mkdir logs
 
-##±©Â¶6380¶Ë¿Ú
+##æš´éœ²6380ç«¯å£
 EXPOSE 6380
 
 
-##Æô¶¯ÈİÆ÷£¬Ö´ĞĞÃüÁîredis-server redis.conf
+##å¯åŠ¨å®¹å™¨ï¼Œæ‰§è¡Œå‘½ä»¤redis-server redis.conf
 ENTRYPOINT ./src/redis-server redis.conf
